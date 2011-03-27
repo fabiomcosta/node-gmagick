@@ -11,7 +11,8 @@
         "vows": ">=0.5.8"
     },
     "scripts": {
-        "install":      "node-waf configure build"
+        "install":      "node-waf configure build",
+        "test":         "make test"
     },
     "repository": {
         "type":         "git",
