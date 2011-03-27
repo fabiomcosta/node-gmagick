@@ -9,12 +9,21 @@ vows.describe('Image Magick javascript module').addBatch({
 			return new Image('fixtures/source.jpg');
 		},
 
-		'we get a cropped image': function(image){
+		'cropping normally': function(image){
 			var targetImage = 'temp/cropped.jpg';
 			image.crop(200, 400, 180, 100).save(targetImage);
 			var croppedImage = new Image(targetImage);
 			assert.equal(croppedImage.size[0], 200);
 			assert.equal(croppedImage.size[1], 380);
+		},
+		
+		'cropping with negative offsets': function(image){
+			var targetImage = 'temp/cropped2.jpg';
+			image.crop(10, 10, -10, -10).save(targetImage);
+			var croppedImage = new Image(targetImage);
+			assert.equal(croppedImage.size[0], 10);
+			assert.equal(croppedImage.size[1], 10);
 		}
+
 	}
 }).export(module);
