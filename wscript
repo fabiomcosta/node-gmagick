@@ -1,7 +1,7 @@
 from os import popen
 
 srcdir = '.'
-blddir = 'build'
+blddir = '_build'
 VERSION = '0.0.1'
 
 def set_options(opt):
@@ -10,10 +10,11 @@ def set_options(opt):
 def configure(conf):
     conf.check_tool('compiler_cxx')
     conf.check_tool('node_addon')
+    magick_config = conf.find_program('Magick++-config', mandatory=True)
+    conf.env.append_value("CPPFLAGS", ''.join(popen("%s --cxxflags --cppflags" % magick_config).readlines()).strip().split())
+    conf.env.append_value("LINKFLAGS", ''.join(popen("%s --ldflags --libs" % magick_config).readlines()).strip().split())
 
 def build(bld):
     obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
-    obj.cxxflags = obj.to_list(popen("echo `Magick++-config --cxxflags --cppflags`").readline().strip())
-    obj.linkflags = obj.to_list(popen("echo `Magick++-config --ldflags --libs`").readline().strip())
-    obj.target = 'imagick'
-    obj.source = 'imagick.cc'
+    obj.target = 'binding'
+    obj.source = 'binding.cc'
