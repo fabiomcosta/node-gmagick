@@ -40,5 +40,21 @@ vows.describe('Image Magick javascript module').addBatch({
 			}
 		}
 		
+	},
+	
+	'resize image': {
+		
+		'with sane values': {
+			topic: new Image('fixtures/source.jpg'),
+			
+			'should crop normally': function(image){
+				var targetImage = 'temp/resized.jpg';
+				image.crop(200, 380, 180, 100).save(targetImage);
+				var croppedImage = new Image(targetImage);
+				assert.equal(croppedImage.size[0], 200);
+				assert.equal(croppedImage.size[1], 380);
+			}
+		},
+		
 	}
 }).export(module);

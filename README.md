@@ -4,6 +4,8 @@ Node-Imagick [Fábio Miranda Costa](http://meiocodigo.com/)
 Node-Imagick is a [node-js](http://github.com/joyent/node) binding for [ImageMagick++](http://www.imagemagick.org/).
 I'm learning how to do it, do not expect much from it right now.
 
+This project is not related to the the PHP IMagick project and won't have the same API.
+
 Build
 -----
 

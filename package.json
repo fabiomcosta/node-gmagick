@@ -1,0 +1,24 @@
+{
+    "name":         "imagick",
+    "version":      "0.1.0",
+    "author":       "Fábio Miranda Costa",
+    "description":  "A ImageMagick addon for nodejs.",
+    "keywords":     ["image", "magick", "imagick", "imagemagick", "image-magick"],
+    "homepage":     "http://github.com/fabiomcosta/node-imagick",
+    "main":         "./imagick",
+    "engines":      { "node": ">=0.4.0" },
+    "devDependencies": {
+        "vows": ">=0.5.8"
+    },
+    "scripts": {
+        "install":      "node-waf configure build"
+    },
+    "repository": {
+        "type":         "git",
+        "url":          "http://github.com/fabiomcosta/node-imagick.git"
+    },
+    "bugs": {
+        "mail":         "",
+        "web":          "http://github.com/fabiomcosta/node-imagick/issues"
+    }
+}
