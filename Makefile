@@ -3,4 +3,4 @@ build:
 
 test: build
 	@mkdir -p tests/temp/ && rm -rf tests/temp/*
-	@cd tests && vows *.*
+	@cd tests && vows *.js

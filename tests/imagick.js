@@ -3,6 +3,23 @@ var vows = require('vows'),
 	Image = require('../imagick').Image;
 
 vows.describe('Image Magick javascript module').addBatch({
+	'creating instance': {
+		'should not throw any error on an existent image': function(){
+			new Image('fixtures/source.jpg');
+		},
+		'should throw error on a non defined path': function(){
+			assert.throws(function(){
+			    new Image();
+			}, /should be specified/);
+		}
+		/*,
+		'should throw error on a non-existent path': function(){
+			assert.throws(function(){
+			    new Image('fixtures/inexistent_source.jpg');
+			}, /does not exists/);
+		}*/
+	},
+	
 	'cropping image': {
 
 		'with sane values': {
@@ -40,7 +57,8 @@ vows.describe('Image Magick javascript module').addBatch({
 			}
 		}
 		
-	},
+	}
+	/*,
 	
 	'resize image': {
 		
@@ -56,5 +74,5 @@ vows.describe('Image Magick javascript module').addBatch({
 			}
 		},
 		
-	}
+	}*/
 }).export(module);
