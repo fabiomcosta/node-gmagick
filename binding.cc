@@ -31,6 +31,8 @@ public:
 
         NODE_SET_PROTOTYPE_METHOD(s_ct, "save", Save);
         NODE_SET_PROTOTYPE_METHOD(s_ct, "crop", Crop);
+        
+        t->PrototypeTemplate()->SetAccessor(String::NewSymbol("size"), Size);
 
         target->Set(String::NewSymbol("Image"), s_ct->GetFunction());
     }
@@ -58,7 +60,7 @@ public:
         
         image->magick_image.crop(Magick::Geometry(width, height, offsetX, offsetY));
         
-        return Undefined();
+        return args.This();
     }
     
     static Handle<Value> Save(const Arguments& args){
@@ -68,7 +70,21 @@ public:
         String::Utf8Value image_path(args[0]->ToString());
         image->magick_image.write(*image_path);
         
-        return Undefined();
+        return args.This();
+    }
+    
+    static Handle<Value> Size(Local<String> property, const AccessorInfo& info){
+        HandleScope scope;
+        Image* image = ObjectWrap::Unwrap<Image>(info.This());
+        
+        Magick::Geometry geometry(image->magick_image.size());
+        
+        Local<Array> size = Array::New(2);
+        
+        size->Set(0, Integer::New(geometry.width()));
+        size->Set(1, Integer::New(geometry.height()));
+        
+        return scope.Close(size);
     }
 
 };
