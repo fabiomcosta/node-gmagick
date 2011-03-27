@@ -10,7 +10,7 @@ vows.describe('Image Magick javascript module').addBatch({
 			
 			'should crop normally': function(image){
 				var targetImage = 'temp/cropped.jpg';
-				image.crop(200, 400, 180, 100).save(targetImage);
+				image.crop(200, 380, 180, 100).save(targetImage);
 				var croppedImage = new Image(targetImage);
 				assert.equal(croppedImage.size[0], 200);
 				assert.equal(croppedImage.size[1], 380);
@@ -27,7 +27,18 @@ vows.describe('Image Magick javascript module').addBatch({
 				assert.equal(croppedImage.size[0], 10);
 				assert.equal(croppedImage.size[1], 10);
 			}
+		},
+		
+		'with negative offsets, in a way that it will create less than 1px of area': {
+			topic: new Image('fixtures/source.jpg'),
+			
+			'should not crop normally': function(image){
+				var targetImage = 'temp/cropped3.jpg';
+				assert.throws(function(){
+					image.crop(10, 10, -10, -10).save(targetImage);
+				}, /invalid crop region/i);
+			}
 		}
-
+		
 	}
 }).export(module);

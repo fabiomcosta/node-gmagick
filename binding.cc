@@ -1,9 +1,12 @@
 #include <v8.h>
 #include <node.h>
 #include <Magick++.h>
+#include <stdlib.h>
 
 using namespace node;
 using namespace v8;
+
+# define DEBUG_PRINT(...) fprintf(stderr, __VA_ARGS__)
 
 class Image: ObjectWrap{
 
@@ -30,7 +33,7 @@ public:
         s_ct->SetClassName(String::NewSymbol("Image"));
 
         NODE_SET_PROTOTYPE_METHOD(s_ct, "save", Save);
-        NODE_SET_PROTOTYPE_METHOD(s_ct, "crop", Crop);
+        NODE_SET_PROTOTYPE_METHOD(s_ct, "_crop", Crop);
         
         t->PrototypeTemplate()->SetAccessor(String::NewSymbol("size"), Size);
 
@@ -58,7 +61,9 @@ public:
         int offsetX(args[2]->NumberValue());
         int offsetY(args[3]->NumberValue());
         
-        image->magick_image.crop(Magick::Geometry(width, height, offsetX, offsetY));
+        Magick::Geometry geometry(width, height, offsetX, offsetY);
+        
+        image->magick_image.crop(geometry);
         
         return args.This();
     }
@@ -71,7 +76,7 @@ public:
         image->magick_image.write(*image_path);
         
         return args.This();
-    }
+    }   
     
     static Handle<Value> Size(Local<String> property, const AccessorInfo& info){
         HandleScope scope;
