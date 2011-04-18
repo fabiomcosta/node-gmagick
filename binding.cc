@@ -12,7 +12,7 @@ class Image: ObjectWrap{
 
 private:
 
-    Magick::Image magick_image;
+    Magick::Image gm_image;
 
 public:
 
@@ -22,15 +22,18 @@ public:
     }
 
     static void Init(Handle<Object> target){
+
+        Magick::InitializeMagick(NULL);
         Local<FunctionTemplate> function_template = FunctionTemplate::New(New);
 
         function_template->InstanceTemplate()->SetInternalFieldCount(1);
         function_template->SetClassName(String::NewSymbol("Image"));
 
+        NODE_SET_PROTOTYPE_METHOD(function_template, "read", Read);
         NODE_SET_PROTOTYPE_METHOD(function_template, "save", Save);
         NODE_SET_PROTOTYPE_METHOD(function_template, "crop", Crop);
 
-        function_template->InstanceTemplate()->SetAccessor(String::NewSymbol("size"), Size);
+        //function_template->InstanceTemplate()->SetAccessor(String::NewSymbol("size"), Size);
 
         target->Set(String::NewSymbol("Image"), function_template->GetFunction());
     }
@@ -39,20 +42,18 @@ public:
         HandleScope scope;
 
         Image* image = new Image();
-
-        if (args[0]->IsUndefined()){
-            return ThrowException(Exception::Error(String::New("A image path should be specified.")));
-        }
-
-        String::Utf8Value image_path(args[0]->ToString());
-
-        // if (!File.Stat(*image_path)){
-        //     return ThrowException(Exception::Error(String::New("Image path does not exists.")));
-        // }
-
-        image->magick_image.read(*image_path);
-
         image->Wrap(args.This());
+
+        return scope.Close(args.This());
+    }
+
+    static Handle<Value> Read(const Arguments& args){
+        HandleScope scope;
+
+        Image* image = ObjectWrap::Unwrap<Image>(args.This());
+        String::Utf8Value image_path(args[0]->ToString());
+        image->gm_image.read(*image_path);
+
         return scope.Close(args.This());
     }
 
@@ -71,7 +72,7 @@ public:
             return ThrowException(Exception::Error(String::New("Passed values make an invalid crop region.")));
         }
         
-        image->magick_image.crop(geometry);
+        image->gm_image.crop(geometry);
 
         return scope.Close(args.This());
     }
@@ -81,24 +82,24 @@ public:
         Image* image = ObjectWrap::Unwrap<Image>(args.This());
 
         String::Utf8Value image_path(args[0]->ToString());
-        image->magick_image.write(*image_path);
+        image->gm_image.write(*image_path);
 
         return scope.Close(args.This());
     }
 
-    static Handle<Value> Size(Local<String> property, const AccessorInfo& info){
-        HandleScope scope;
-        Image* image = ObjectWrap::Unwrap<Image>(info.This());
+    //static Handle<Value> Size(Local<String> property, const AccessorInfo& info){
+        //HandleScope scope;
+        //Image* image = ObjectWrap::Unwrap<Image>(info.This());
 
-        Magick::Geometry geometry(image->magick_image.size());
+        //Magick::Geometry geometry(image->gm_image.size());
 
-        Local<Array> size = Array::New(2);
+        //Local<Array> size = Array::New(2);
 
-        size->Set(0, Integer::New(geometry.width()));
-        size->Set(1, Integer::New(geometry.height()));
+        //size->Set(0, Integer::New(geometry.width()));
+        //size->Set(1, Integer::New(geometry.height()));
 
-        return scope.Close(size);
-    }
+        //return scope.Close(size);
+    //}
 
 };
 

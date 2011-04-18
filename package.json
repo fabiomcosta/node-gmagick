@@ -1,11 +1,11 @@
 {
-    "name":         "imagick",
+    "name":         "gmagick",
     "version":      "0.1.0",
     "author":       "Fábio Miranda Costa",
-    "description":  "A ImageMagick addon for nodejs.",
-    "keywords":     ["image", "magick", "imagick", "imagemagick", "image-magick"],
-    "homepage":     "http://github.com/fabiomcosta/node-imagick",
-    "main":         "./imagick",
+    "description":  "A GraphicsMagick addon for nodejs.",
+    "keywords":     ["image", "magick", "gmagick", "graphicsmagick", "graphics-magick"],
+    "homepage":     "http://github.com/fabiomcosta/node-gmagick",
+    "main":         "./gmagick",
     "engines":      { "node": ">=0.4.0" },
     "devDependencies": {
         "vows": ">=0.5.8"
@@ -16,10 +16,10 @@
     },
     "repository": {
         "type":         "git",
-        "url":          "http://github.com/fabiomcosta/node-imagick.git"
+        "url":          "http://github.com/fabiomcosta/node-gmagick.git"
     },
     "bugs": {
         "mail":         "",
-        "web":          "http://github.com/fabiomcosta/node-imagick/issues"
+        "web":          "http://github.com/fabiomcosta/node-gmagick/issues"
     }
 }

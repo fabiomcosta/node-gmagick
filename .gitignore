@@ -3,3 +3,4 @@ _build/
 .lock-wscript
 tests/temp/
 .DS_Store
+*.swp
