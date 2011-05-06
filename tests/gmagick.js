@@ -20,70 +20,64 @@ vows.describe('Image Magick javascript module').addBatch({
         }
     },
 
-    'the readSync method': {
-        topic: function(){
-            return new Image('fixtures/source.jpg');
-        },
-        'should throw error on a non defined path': function(topic){
-            assert.throws(function(){
-                topic.readSync();
-            }, /should be specified/);
-        },
-        'should throw error on a non-existent path': function(topic){
-            assert.throws(function(){
-                topic.readSync('fixtures/inexistent_source.jpg');
-            }, /does not exists/);
-        }
-    },
+    'the image methods': {
 
-    'the writeSync method': {
-        topic: function(){
-            return new Image('fixtures/source.jpg');
+        topic: new Image('fixtures/source.jpg'),
+
+        'readSync method': {
+            'should throw error on a non defined path': function(topic){
+                assert.throws(function(){
+                    topic.readSync();
+                }, /should be specified/);
+            },
+            'should throw error on a non-existent path': function(topic){
+                assert.throws(function(){
+                    topic.readSync('fixtures/inexistent_source.jpg');
+                }, /does not exists/);
+            }
         },
-        'should save an image': function(topic){
-            topic.writeSync('temp/temp.jpeg');
-            assert.ok(path.existsSync('temp/temp.jpeg'));
-        }
-    }
 
-    //'cropping image': {
+        'writeSync method': {
+            'should save an image': function(topic){
+                topic.writeSync('temp/temp.jpeg');
+                assert.ok(path.existsSync('temp/temp.jpeg'));
+            }
+        },
 
-        //'with sane values': {
+        'crop method': {
+            'with sane values': {
+                'should crop normally': function(image){
+                    var targetImage = 'temp/cropped.jpg';
+                    image.crop(200, 380, 180, 100).writeSync(targetImage);
+                    var croppedImage = new Image(targetImage);
+                    assert.equal(croppedImage.size[0], 200);
+                    assert.equal(croppedImage.size[1], 380);
+                }
+            },
+
+            //'with negative offsets': {
+                //'should crop normally': function(image){
+                    //var targetImage = 'temp/cropped2.jpg';
+                    //image.crop(20, 20, -10, -10).writeSync(targetImage);
+                    //var croppedImage = new Image(targetImage);
+                    //assert.equal(croppedImage.size[0], 10);
+                    //assert.equal(croppedImage.size[1], 10);
+                //}
+            //},
+
+            //'with negative offsets, in a way that it will create less than 1px of area': {
             //topic: new Image('fixtures/source.jpg'),
-            
-            //'should crop normally': function(image){
-                //var targetImage = 'temp/cropped.jpg';
-                //image.crop(200, 380, 180, 100).save(targetImage);
-                //var croppedImage = new Image(targetImage);
-                //assert.equal(croppedImage.size[0], 200);
-                //assert.equal(croppedImage.size[1], 380);
-            //}
-        //},
-        
-        //'with negative offsets': {
-            //topic: new Image('fixtures/source.jpg'),
-            
-            //'should crop normally': function(image){
-                //var targetImage = 'temp/cropped2.jpg';
-                //image.crop(20, 20, -10, -10).save(targetImage);
-                //var croppedImage = new Image(targetImage);
-                //assert.equal(croppedImage.size[0], 10);
-                //assert.equal(croppedImage.size[1], 10);
-            //}
-        //},
-        
-        //'with negative offsets, in a way that it will create less than 1px of area': {
-            //topic: new Image('fixtures/source.jpg'),
-            
+
             //'should not crop normally': function(image){
-                //var targetImage = 'temp/cropped3.jpg';
-                //assert.throws(function(){
-                    //image.crop(10, 10, -10, -10).save(targetImage);
-                //}, /invalid crop region/i);
+            //var targetImage = 'temp/cropped3.jpg';
+            //assert.throws(function(){
+            //image.crop(10, 10, -10, -10).save(targetImage);
+            //}, /invalid crop region/i);
             //}
-        //}
-        
-    //}
+            //}
+
+    }
+    }
     /*,
     
     'resize image': {

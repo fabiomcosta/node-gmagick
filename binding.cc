@@ -33,7 +33,7 @@ public:
         NODE_SET_PROTOTYPE_METHOD(function_template, "write", Write);
         NODE_SET_PROTOTYPE_METHOD(function_template, "crop", Crop);
 
-        //function_template->InstanceTemplate()->SetAccessor(String::NewSymbol("size"), Size);
+        function_template->InstanceTemplate()->SetAccessor(String::NewSymbol("size"), Size);
 
         target->Set(String::NewSymbol("Image"), function_template->GetFunction());
     }
@@ -68,10 +68,6 @@ public:
 
         Magick::Geometry geometry(width, height, offsetX, offsetY);
         
-        if ((width + offsetX <= 0) || (height + offsetY <= 0) || !geometry.isValid()){
-            return ThrowException(Exception::Error(String::New("Passed values make an invalid crop region.")));
-        }
-        
         image->gm_image.crop(geometry);
 
         return scope.Close(args.This());
@@ -87,19 +83,19 @@ public:
         return scope.Close(args.This());
     }
 
-    //static Handle<Value> Size(Local<String> property, const AccessorInfo& info){
-        //HandleScope scope;
-        //Image* image = ObjectWrap::Unwrap<Image>(info.This());
+    static Handle<Value> Size(Local<String> property, const AccessorInfo& info){
+        HandleScope scope;
+        Image* image = ObjectWrap::Unwrap<Image>(info.This());
 
-        //Magick::Geometry geometry(image->gm_image.size());
+        Magick::Geometry geometry(image->gm_image.size());
 
-        //Local<Array> size = Array::New(2);
+        Local<Array> size = Array::New(2);
 
-        //size->Set(0, Integer::New(geometry.width()));
-        //size->Set(1, Integer::New(geometry.height()));
+        size->Set(0, Integer::New(geometry.width()));
+        size->Set(1, Integer::New(geometry.height()));
 
-        //return scope.Close(size);
-    //}
+        return scope.Close(size);
+    }
 
 };
 
