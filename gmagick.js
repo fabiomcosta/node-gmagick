@@ -27,11 +27,11 @@ Image.prototype.readSync = function(imagePath){
     return this;
 };
 
-Image.prototype.saveSync = function(imagePath){
+Image.prototype.writeSync = function(imagePath){
     if (imagePath == null){
         throw pathShouldBeSpecifiedError;
     }
-    this._image.save(imagePath);
+    this._image.write(imagePath);
     return this;
 };
 

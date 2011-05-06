@@ -36,12 +36,12 @@ vows.describe('Image Magick javascript module').addBatch({
         }
     },
 
-    'the saveSync method': {
+    'the writeSync method': {
         topic: function(){
             return new Image('fixtures/source.jpg');
         },
         'should save an image': function(topic){
-            topic.saveSync('temp/temp.jpeg');
+            topic.writeSync('temp/temp.jpeg');
             assert.ok(path.existsSync('temp/temp.jpeg'));
         }
     }

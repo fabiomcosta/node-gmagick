@@ -30,7 +30,7 @@ public:
         function_template->SetClassName(String::NewSymbol("Image"));
 
         NODE_SET_PROTOTYPE_METHOD(function_template, "read", Read);
-        NODE_SET_PROTOTYPE_METHOD(function_template, "save", Save);
+        NODE_SET_PROTOTYPE_METHOD(function_template, "write", Write);
         NODE_SET_PROTOTYPE_METHOD(function_template, "crop", Crop);
 
         //function_template->InstanceTemplate()->SetAccessor(String::NewSymbol("size"), Size);
@@ -77,7 +77,7 @@ public:
         return scope.Close(args.This());
     }
 
-    static Handle<Value> Save(const Arguments& args){
+    static Handle<Value> Write(const Arguments& args){
         HandleScope scope;
         Image* image = ObjectWrap::Unwrap<Image>(args.This());
 
