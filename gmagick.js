@@ -1,10 +1,12 @@
 var CImage = require('./_build/default/binding').Image;
+var path = require('path');
 
-var pathError = new Error('Image path should be specified');
+var pathShouldBeSpecifiedError = new Error('Image path should be specified.');
+var pathDoesNotExistsError = new Error('Image path does not exists.');
 
 
-var Image = exports.Image = function(path){
-    this.reset().readSync(path);
+var Image = exports.Image = function(imagePath){
+    this.reset().readSync(imagePath);
 };
 
 Image.prototype.reset = function(){
@@ -12,21 +14,24 @@ Image.prototype.reset = function(){
     return this;
 };
 
-Image.prototype.readSync = function(path){
-    if (path == null){
-        throw pathError;
+Image.prototype.readSync = function(imagePath){
+    if (imagePath == null){
+        throw pathShouldBeSpecifiedError;
+    }
+    if (!path.existsSync(imagePath)){
+        throw pathDoesNotExistsError;
     }
     // check for image path
     // Image path does not exists.
-    this._image.read(path);
+    this._image.read(imagePath);
     return this;
 };
 
-Image.prototype.saveSync = function(path){
-    if (path == null){
-        throw pathError;
+Image.prototype.saveSync = function(imagePath){
+    if (imagePath == null){
+        throw pathShouldBeSpecifiedError;
     }
-    this._image.save(path);
+    this._image.save(imagePath);
     return this;
 };
 
