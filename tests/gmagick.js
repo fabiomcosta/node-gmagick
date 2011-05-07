@@ -3,10 +3,14 @@ var vows = require('vows'),
     path = require('path'),
     Image = require('../gmagick').Image;
 
+var newImage = function(){
+    return new Image('fixtures/source.jpg');
+};
+
 vows.describe('Image Magick javascript module').addBatch({
     'creating instance': {
         'should not throw any error on an existent image': function(){
-            new Image('fixtures/source.jpg');
+            assert.doesNotThrow(newImage);
         },
         'should throw error on a non defined path': function(){
             assert.throws(function(){
@@ -21,8 +25,7 @@ vows.describe('Image Magick javascript module').addBatch({
     },
 
     'the image methods': {
-
-        topic: new Image('fixtures/source.jpg'),
+        topic: newImage,
 
         'readSync method': {
             'should throw error on a non defined path': function(topic){
@@ -38,45 +41,56 @@ vows.describe('Image Magick javascript module').addBatch({
         },
 
         'writeSync method': {
-            'should save an image': function(topic){
-                topic.writeSync('temp/temp.jpeg');
-                assert.ok(path.existsSync('temp/temp.jpeg'));
+            topic: function(old){
+                return old.writeSync('temp/temp.jpg');
+            },
+            'written image should exist': function(topic){
+                assert.ok(path.existsSync('temp/temp.jpg'));
+            },
+            'with written image': {
+                topic: function(){
+                    return new Image('temp/temp.jpg');
+                },
+                'should have the same width of the original': function(topic){
+                    assert.ok(topic.size[0], 640);
+                },
+                'should have the same heigth of the original': function(topic){
+                    assert.ok(topic.size[1], 480);
+                }
             }
         },
 
         'crop method': {
             'with sane values': {
-                'should crop normally': function(image){
-                    var targetImage = 'temp/cropped.jpg';
-                    image.crop(200, 380, 180, 100).writeSync(targetImage);
-                    var croppedImage = new Image(targetImage);
-                    assert.equal(croppedImage.size[0], 200);
-                    assert.equal(croppedImage.size[1], 380);
+                topic: function(){
+                    return newImage().crop(200, 380, 0, 0);
+                },
+                'should have the defined width from crop': function(topic){
+                    assert.equal(topic.size[0], 200);
+                },
+                'should have the defined height from crop': function(topic){
+                    assert.equal(topic.size[1], 380);
                 }
             },
-
-            //'with negative offsets': {
-                //'should crop normally': function(image){
-                    //var targetImage = 'temp/cropped2.jpg';
-                    //image.crop(20, 20, -10, -10).writeSync(targetImage);
-                    //var croppedImage = new Image(targetImage);
-                    //assert.equal(croppedImage.size[0], 10);
-                    //assert.equal(croppedImage.size[1], 10);
-                //}
-            //},
-
-            //'with negative offsets, in a way that it will create less than 1px of area': {
-            //topic: new Image('fixtures/source.jpg'),
-
-            //'should not crop normally': function(image){
-            //var targetImage = 'temp/cropped3.jpg';
-            //assert.throws(function(){
-            //image.crop(10, 10, -10, -10).save(targetImage);
-            //}, /invalid crop region/i);
-            //}
-            //}
-
-    }
+            'with incorrect values': {
+                'should throw an error with negative offsets': function(topic){
+                    assert.throws(function(){
+                        topic.crop(20, 20, -10, -10);
+                    }, /invalid crop region/);
+                },
+                'with a crop bigger than the image size': {
+                    topic: function(){
+                        return newImage().crop(700, 700, 0, 0);
+                    },
+                    'should keep the image integrity on width bigger than the images': function(topic){
+                        assert.equal(topic.size[0], 640);
+                    },
+                    'should keep the image integrity on height bigger than the images': function(topic){
+                        assert.equal(topic.size[1], 480);
+                    }
+                }
+            }
+        }
     }
     /*,
     
@@ -93,7 +107,6 @@ vows.describe('Image Magick javascript module').addBatch({
                 assert.equal(croppedImage.size[1], 380);
             }
         },
-        
     }*/
 }).export(module);
 

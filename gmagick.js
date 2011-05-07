@@ -5,7 +5,6 @@ var pathShouldBeSpecifiedError = new Error('Image path should be specified.');
 var pathDoesNotExistsError = new Error('Image path does not exists.');
 var invalidCropRegionError = new Error('Passed values make an invalid crop region.');
 
-
 var Image = exports.Image = function(imagePath){
     this.reset().readSync(imagePath);
 };
@@ -37,8 +36,8 @@ Image.prototype.writeSync = function(imagePath){
 };
 
 Image.prototype.crop = function(width, height, offsetX, offsetY){
-    if ((width + offsetX <= 0) || (height + offsetY <= 0)){
-        return invalidCropRegionError;
+    if ((offsetX < 0) || (offsetY < 0)){
+        throw invalidCropRegionError;
     }
     this._image.crop(width, height, offsetX, offsetY);
     return this;
