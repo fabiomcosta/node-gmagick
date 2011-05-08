@@ -40,6 +40,18 @@ vows.describe('Image Magick javascript module').addBatch({
             }
         },
 
+        'read method': {
+            topic: function(){
+                newImage().read('/Users/fabio/Sites/projects/js/node-gmagick/tests/fixtures/source.jpg', this.callback);
+            },
+            'should make the image available while on the callback': function(err, image){
+                console.log(image);
+                assert.equal(image, 1);
+                //assert.equal(image.size[0], 640);
+                //assert.equal(image.size[1], 480);
+            }
+        },
+
         'writeSync method': {
             topic: function(old){
                 return old.writeSync('temp/temp.jpg');
@@ -90,23 +102,19 @@ vows.describe('Image Magick javascript module').addBatch({
                     }
                 }
             }
-        }
-    }
-    /*,
-    
-    'resize image': {
-        
-        'with sane values': {
-            topic: new Image('fixtures/source.jpg'),
-            
-            'should crop normally': function(image){
-                var targetImage = 'temp/resized.jpg';
-                image.crop(200, 380, 180, 100).save(targetImage);
-                var croppedImage = new Image(targetImage);
-                assert.equal(croppedImage.size[0], 200);
-                assert.equal(croppedImage.size[1], 380);
-            }
         },
-    }*/
+        //'resize method': {
+            //topic: function(){
+                //return newImage().resize(200, 300);
+            //},
+            //'should have the defined width from the resize method': function(topic){
+                //assert.equal(topic.size[0], 200);
+            //},
+            //'should have the defined height from the resize method': function(topic){
+                //assert.equal(topic.size[0], 300);
+            //}
+        //}
+    }
+    
 }).export(module);
 

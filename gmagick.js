@@ -1,4 +1,8 @@
-var CImage = require('./_build/default/binding').Image;
+var gmagickModule = (process.env.GMAGICK_DEBUG != undefined)
+                       ? './_build/default/binding_g'
+                       : './_build/default/binding';
+
+var CImage = require(gmagickModule).Image;
 var path = require('path');
 
 var pathShouldBeSpecifiedError = new Error('Image path should be specified.');
@@ -23,16 +27,24 @@ Image.prototype.readSync = function(imagePath){
     }
     // check for image path
     // Image path does not exists.
-    this._image.read(imagePath);
+    this._image.readSync(imagePath);
     return this;
+};
+
+Image.prototype.read = function(imagePath, callback){
+    this._image.read(imagePath, callback);
 };
 
 Image.prototype.writeSync = function(imagePath){
     if (imagePath == null){
         throw pathShouldBeSpecifiedError;
     }
-    this._image.write(imagePath);
+    this._image.writeSync(imagePath);
     return this;
+};
+
+Image.prototype.write = function(imagePath){
+
 };
 
 Image.prototype.crop = function(width, height, offsetX, offsetY){

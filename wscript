@@ -15,6 +15,14 @@ def configure(conf):
     conf.env.append_value("LINKFLAGS", ''.join(popen("%s --ldflags --libs" % gmagick_config).readlines()).strip().split())
 
 def build(bld):
-    obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
+    tasks = ('cxx', 'shlib', 'node_addon')
+
+    obj = bld.new_task_gen(*tasks)
     obj.target = 'binding'
     obj.source = 'binding.cc'
+
+    #debug module
+    obj_debug = bld.new_task_gen(*tasks)
+    obj_debug.target = '%s_g' % obj.target
+    obj_debug.source = obj.source
+    obj_debug.cxxflags = ["-DDEBUG"]
