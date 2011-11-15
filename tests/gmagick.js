@@ -3,8 +3,13 @@ var vows = require('vows'),
     path = require('path'),
     Image = require('../gmagick').Image;
 
+
+var fixturePath = path.join(__dirname, 'fixtures'),
+    sourceImagePath = path.join(fixturePath, 'source.jpg');
+
+
 var newImage = function(){
-    return new Image('fixtures/source.jpg');
+    return new Image(sourceImagePath);
 };
 
 vows.describe('Image Magick javascript module').addBatch({
@@ -42,10 +47,9 @@ vows.describe('Image Magick javascript module').addBatch({
 
         'read method': {
             topic: function(){
-                newImage().read('/Users/fabio/Sites/projects/js/node-gmagick/tests/fixtures/source.jpg', this.callback);
+                newImage().read(sourceImagePath, this.callback);
             },
             'should make the image available while on the callback': function(err, image){
-                console.log(image);
                 assert.equal(image, 1);
                 //assert.equal(image.size[0], 640);
                 //assert.equal(image.size[1], 480);

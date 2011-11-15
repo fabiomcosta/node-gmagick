@@ -5,9 +5,9 @@ var gmagickModule = (process.env.GMAGICK_DEBUG != undefined)
 var CImage = require(gmagickModule).Image;
 var path = require('path');
 
-var pathShouldBeSpecifiedError = new Error('Image path should be specified.');
-var pathDoesNotExistsError = new Error('Image path does not exists.');
-var invalidCropRegionError = new Error('Passed values make an invalid crop region.');
+var pathShouldBeSpecifiedError = Error('Image path should be specified.');
+var pathDoesNotExistsError = Error('Image path does not exists.');
+var invalidCropRegionError = Error('Passed values make an invalid crop region.');
 
 var Image = exports.Image = function(imagePath){
     this.reset().readSync(imagePath);
