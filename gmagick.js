@@ -1,6 +1,6 @@
-var gmagickModule = (process.env.GMAGICK_DEBUG != undefined)
-                       ? './_build/default/binding_g'
-                       : './_build/default/binding';
+var gmagickModule = (process.env.GMAGICK_DEBUG)
+   ? './_build/Release/binding_g'
+   : './_build/Release/binding';
 
 var CImage = require(gmagickModule).Image;
 var path = require('path');
@@ -9,16 +9,16 @@ var pathShouldBeSpecifiedError = Error('Image path should be specified.');
 var pathDoesNotExistsError = Error('Image path does not exists.');
 var invalidCropRegionError = Error('Passed values make an invalid crop region.');
 
-var Image = exports.Image = function(imagePath){
+var Image = exports.Image = function(imagePath) {
     this.reset().readSync(imagePath);
 };
 
-Image.prototype.reset = function(){
+Image.prototype.reset = function() {
     this._image = new CImage;
     return this;
 };
 
-Image.prototype.readSync = function(imagePath){
+Image.prototype.readSync = function(imagePath) {
     if (imagePath == null){
         throw pathShouldBeSpecifiedError;
     }
@@ -31,11 +31,11 @@ Image.prototype.readSync = function(imagePath){
     return this;
 };
 
-Image.prototype.read = function(imagePath, callback){
+Image.prototype.read = function(imagePath, callback) {
     this._image.read(imagePath, callback);
 };
 
-Image.prototype.writeSync = function(imagePath){
+Image.prototype.writeSync = function(imagePath) {
     if (imagePath == null){
         throw pathShouldBeSpecifiedError;
     }
@@ -47,7 +47,7 @@ Image.prototype.write = function(imagePath){
 
 };
 
-Image.prototype.crop = function(width, height, offsetX, offsetY){
+Image.prototype.crop = function(width, height, offsetX, offsetY) {
     if ((offsetX < 0) || (offsetY < 0)){
         throw invalidCropRegionError;
     }
@@ -55,6 +55,7 @@ Image.prototype.crop = function(width, height, offsetX, offsetY){
     return this;
 };
 
-Image.prototype.__defineGetter__('size', function(){
+Image.prototype.__defineGetter__('size', function() {
     return this._image.size;
 });
+
