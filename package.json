@@ -11,7 +11,7 @@
         "vows": ">=0.5.8"
     },
     "scripts": {
-        "install":      "node-waf configure build",
+        "install":      "make build",
         "test":         "make test"
     },
     "repository": {
@@ -20,6 +20,6 @@
     },
     "bugs": {
         "mail":         "",
-        "web":          "http://github.com/fabiomcosta/node-gmagick/issues"
+        "url":          "http://github.com/fabiomcosta/node-gmagick/issues"
     }
 }
