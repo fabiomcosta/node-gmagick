@@ -1,3 +1,4 @@
+#include <uv.h>
 #include <v8.h>
 #include <node.h>
 #include <Magick++.h>
@@ -75,26 +76,26 @@ public:
         ir->image = image;
 
         eio_custom(ReadEvent, EIO_PRI_DEFAULT, ReadAfter, ir);
-        ev_ref(EV_DEFAULT_UC);
+
+        uv_ref(uv_default_loop());
         image->Ref();
 
         return scope.Close(args.This());
     }
 
-    static int ReadEvent(eio_req *request){
+    static void ReadEvent(eio_req *request){
         image_request *ir = (image_request *)request->data;
         DEBUG_PRINT("before reading image %s\n", ir->image_path);
-        
+
         // i cant get this to work :S
         ir->image->gm_image.read(ir->image_path);
 
         DEBUG_PRINT("after reading image %s\n", ir->image_path);
-        return 0;
     }
 
     static int ReadAfter(eio_req *request) {
         HandleScope scope;
-        ev_unref(EV_DEFAULT_UC);
+        uv_unref(uv_default_loop());
         image_request *ir = (image_request *)request->data;
         Local<Value> argv[2];
         argv[0] = Local<Value>::New(Null());
