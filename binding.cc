@@ -15,6 +15,7 @@ using namespace v8;
 # define ASSERT(x)
 #endif
 
+
 class Image: ObjectWrap{
 
 private:
@@ -85,21 +86,20 @@ public:
 
     static void ReadEvent(eio_req *request){
         image_request *ir = (image_request *)request->data;
-        DEBUG_PRINT("before reading image %s\n", ir->image_path);
-
+        DEBUG_PRINT("inside eio: before reading image %s\n", ir->image_path);
         // i cant get this to work :S
         ir->image->gm_image.read(ir->image_path);
-
-        DEBUG_PRINT("after reading image %s\n", ir->image_path);
+        DEBUG_PRINT("inside eio: after reading image %s\n", ir->image_path);
     }
 
     static int ReadAfter(eio_req *request) {
+        DEBUG_PRINT("After read eio\n");
         HandleScope scope;
         uv_unref(uv_default_loop());
         image_request *ir = (image_request *)request->data;
         Local<Value> argv[2];
         argv[0] = Local<Value>::New(Null());
-        argv[1] = Integer::New(1); // thats another problem ir->image;
+        argv[1] = Integer::New(1);
         TryCatch try_catch;
         ir->callback->Call(Context::GetCurrent()->Global(), 2, argv);
         if (try_catch.HasCaught()) {
